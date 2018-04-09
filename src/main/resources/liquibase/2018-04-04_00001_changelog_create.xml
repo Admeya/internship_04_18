@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <property name="ref_author" value="ie.bykova@i-teco.ru"/>
+
+    <changeSet id="createSequence-1" author="${ref_author}">
+        <comment>Создание последовательности для справочника типов документов</comment>
+        <createSequence cycle="true"
+                        incrementBy="10"
+                        maxValue="1000"
+                        minValue="10"
+                        sequenceName="persons_seq"
+                        startValue="10"/>
+    </changeSet>
+
+    <changeSet id="createSequence-2" author="${ref_author}">
+        <comment>Создание последовательности для справочника типов документов</comment>
+        <createSequence cycle="true"
+                        incrementBy="1"
+                        maxValue="100"
+                        minValue="1"
+                        sequenceName="doc_types_seq"
+                        startValue="1"/>
+    </changeSet>
+
+    <changeSet id="createSequence-3" author="${ref_author}">
+        <comment>Создание последовательности для таблицы документов</comment>
+        <createSequence cycle="true"
+                        incrementBy="10"
+                        maxValue="1000"
+                        minValue="10"
+                        sequenceName="documents_seq"
+                        startValue="10"/>
+    </changeSet>
+
+    <changeSet id="create-1" author="${ref_author}" >
+        <comment>Создание таблицы Пользователи</comment>
+        <createTable tableName="persons" remarks="Пользователи">
+            <column name="person_id" type="int" defaultValueSequenceNext="persons_seq" remarks="Идентификатор пользователя">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="last_name" type="varchar(50)" remarks="Фамилия"/>
+            <column name="first_name" type="varchar(30)" remarks="Имя"/>
+            <column name="middle_name" type="varchar(30)" remarks="Отчество"/>
+            <column name="birthdate" type="date" remarks="Дата рождения"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="persons"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create-2" author="${ref_author}">
+        <comment>Создание справочника типы документов</comment>
+        <createTable tableName="doc_types" remarks="Типы документов">
+            <column name="doc_type_id" type="int" defaultValueSequenceNext="doc_types_seq" remarks="Идентификатор">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="doc_type_name" type="varchar(100)" remarks="Наименование типа документа"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="doc_types"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create-3" author="${ref_author}">
+        <comment>Создание таблицы договора</comment>
+        <createTable tableName="documents" remarks="Документы">
+            <column name="document_id" type="bigint" defaultValueSequenceNext="documents_seq" remarks="Идентификатор">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="person_id" type="int" remarks="Идентификатор пользователя">
+                <constraints nullable="false" foreignKeyName="fk_persons" references="persons(person_id)"/>
+            </column>
+            <column name="doc_type_id" type="int" remarks="Идентификатор типа документа">
+                <constraints nullable="false" foreignKeyName="fk_doc_types" references="doc_types(doc_type_id)"/>
+            </column>
+            <column name="doc_name" type="varchar(100)" remarks="Название документа"/>
+            <column name="date_start" type="timestamp" defaultValueDate="current_timestamp" remarks="Дата начала"/>
+            <column name="date_end" type="timestamp" remarks="Дата окончания"/>
+            <column name="amount" type="decimal" remarks="Сумма по договору"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="documents"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create-4" author="${ref_author}">
+        <comment>Создание таблицы договора аренды</comment>
+        <createTable tableName="documents_rent" remarks="Договора аренды">
+            <column name="document_id" type="bigint" remarks="Идентификатор">
+                <constraints primaryKey="true" nullable="false" foreignKeyName="fk_documents_rent"
+                             references="documents(document_id)"/>
+            </column>
+            <column name="address" type="varchar(500)" remarks="Адрес участка аренды"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="documents_rent"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create-5" author="${ref_author}">
+        <comment>Создание таблицы договора оказания услуг</comment>
+        <createTable tableName="documents_service" remarks="Договора оказания услуг">
+            <column name="document_id" type="bigint" remarks="Идентификатор">
+                <constraints primaryKey="true" nullable="false" foreignKeyName="fk_agreements_service"
+                             references="documents(document_id)"/>
+            </column>
+            <column name="service_name" type="varchar(200)" remarks="Наименование компании"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="documents_service"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="createIndex-1" author="${ref_author}">
+        <comment>Индекс по дате начала в таблице документов</comment>
+        <createIndex indexName="idx_documents_date_start"
+                     tableName="documents">
+            <column name="date_start" type="date"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="createIndex-2" author="${ref_author}">
+        <comment>Индекс по дате окончания в таблице документов</comment>
+        <createIndex indexName="idx_documents_date_end"
+                     tableName="documents">
+            <column name="date_end" type="date"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="createIndex-3" author="${ref_author}">
+        <comment>Индекс по сумме в таблице документов</comment>
+        <createIndex indexName="idx_documents_amount"
+                     tableName="documents">
+            <column name="amount" type="decimal"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="createFunc" author="${ref_author}" runOnChange="true">
+        <comment>Создание процедуры для триггера</comment>
+        <createProcedure>
+            CREATE OR REPLACE FUNCTION check_constraints_docs()
+            RETURNS trigger
+            LANGUAGE plpgsql
+            AS $$
+            BEGIN
+                IF NEW.AMOUNT &gt; 1000 THEN
+                    RAISE EXCEPTION 'amount не может быть более 1000';
+                END IF;
+
+                IF NEW.DATE_START&gt;NEW.DATE_END THEN
+                    RAISE EXCEPTION 'DATE_END НЕ МОЖЕТ БЫТЬ РАНЬШЕ DATE_START';
+                END IF;
+
+                RETURN NEW;
+            END;
+            $$;
+        </createProcedure>
+        <rollback>
+            DROP FUNCTION check_constraints_docs();
+        </rollback>
+    </changeSet>
+
+    <changeSet id="createTrig" author="${ref_author}">
+        <comment>Создание триггера</comment>
+        <sql>
+            CREATE TRIGGER check_constraints_docs BEFORE INSERT OR UPDATE ON documents
+                FOR EACH ROW EXECUTE PROCEDURE check_constraints_docs();
+        </sql>
+        <rollback>
+            DROP TRIGGER check_constraints_docs ON my_table;
+        </rollback>
+    </changeSet>
+</databaseChangeLog>
