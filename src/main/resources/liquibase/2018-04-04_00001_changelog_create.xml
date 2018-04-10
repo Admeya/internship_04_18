@@ -137,40 +137,11 @@
             <column name="amount" type="decimal"/>
         </createIndex>
     </changeSet>
-
-    <changeSet id="createFunc" author="${ref_author}" runOnChange="true">
-        <comment>Создание процедуры для триггера</comment>
-        <createProcedure>
-            CREATE OR REPLACE FUNCTION check_constraints_docs()
-            RETURNS trigger
-            LANGUAGE plpgsql
-            AS $$
-            BEGIN
-                IF NEW.AMOUNT &gt; 1000 THEN
-                    RAISE EXCEPTION 'amount не может быть более 1000';
-                END IF;
-
-                IF NEW.DATE_START&gt;NEW.DATE_END THEN
-                    RAISE EXCEPTION 'DATE_END НЕ МОЖЕТ БЫТЬ РАНЬШЕ DATE_START';
-                END IF;
-
-                RETURN NEW;
-            END;
-            $$;
-        </createProcedure>
-        <rollback>
-            DROP FUNCTION check_constraints_docs();
-        </rollback>
-    </changeSet>
-
-    <changeSet id="createTrig" author="${ref_author}">
-        <comment>Создание триггера</comment>
+    <changeSet id="createConstraint" author="${ref_author}">
+        <comment>Проверки на даты и сумму договора</comment>
         <sql>
-            CREATE TRIGGER check_constraints_docs BEFORE INSERT OR UPDATE ON documents
-                FOR EACH ROW EXECUTE PROCEDURE check_constraints_docs();
+            ALTER TABLE documents ADD CONSTRAINT date_check CHECK (date_end >=date_start);
+            ALTER TABLE documents ADD CONSTRAINT sum_check CHECK (amount &lt;=1000 AND amount &gt;=0);
         </sql>
-        <rollback>
-            DROP TRIGGER check_constraints_docs ON my_table;
-        </rollback>
     </changeSet>
 </databaseChangeLog>

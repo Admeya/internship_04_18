@@ -1,3 +1,5 @@
+package ru.iteco.internship;
+
 import liquibase.Contexts;
 import liquibase.LabelExpression;
 import liquibase.Liquibase;
@@ -15,7 +17,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
- *  Тест для запуска liquibase
+ *  Проливка миграций
  */
 @Slf4j
 public class RunLiquibase {
@@ -23,19 +25,19 @@ public class RunLiquibase {
 
     @Test
     public void Test(){
-        Liquibase liquibase = null;
+        Liquibase liquibase;
         try (Connection c = connectionManager.getConnection()) {
             Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(c));
             liquibase = new Liquibase("src\\main\\resources\\liquibase\\changelog-master.xml", new FileSystemResourceAccessor(), database);
             liquibase.update(new Contexts(), new LabelExpression());
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("Исключение при выполнении SQL-запроса", e);
         } catch (DatabaseException e) {
-            e.printStackTrace();
+            log.error("Исключение БД ", e);
         } catch (LiquibaseException e) {
-            e.printStackTrace();
+            log.error("Исключение при выполнении миграции", e);
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            log.error("Класс не найден", e);
         }
     }
 }

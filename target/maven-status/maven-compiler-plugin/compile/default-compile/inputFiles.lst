@@ -1,6 +1,5 @@
-D:\otherJavaProjects\comliquibasex5\src\main\java\ru\iteco\internship\dto\Documents.java
-D:\otherJavaProjects\comliquibasex5\src\main\java\ru\iteco\internship\database\ConnectionManager.java
-D:\otherJavaProjects\comliquibasex5\src\main\java\ru\iteco\internship\database\GlobalConstants.java
-D:\otherJavaProjects\comliquibasex5\src\main\java\ru\iteco\internship\dao\DocumentsDao.java
-D:\otherJavaProjects\comliquibasex5\src\main\java\ru\iteco\internship\dao\DocumentsDaoBean.java
-D:\otherJavaProjects\comliquibasex5\src\main\java\ru\iteco\internship\service\DocumentsService.java
+D:\otherJavaProjects\git\internship_04_18\src\main\java\ru\iteco\internship\service\DocumentService.java
+D:\otherJavaProjects\git\internship_04_18\src\main\java\ru\iteco\internship\dao\DocumentDao.java
+D:\otherJavaProjects\git\internship_04_18\src\main\java\ru\iteco\internship\dto\Document.java
+D:\otherJavaProjects\git\internship_04_18\src\main\java\ru\iteco\internship\dao\DocumentDaoImpl.java
+D:\otherJavaProjects\git\internship_04_18\src\main\java\ru\iteco\internship\database\ConnectionManager.java

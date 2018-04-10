@@ -8,22 +8,25 @@
     <changeSet id="ins1" author="${ref_author}">
         <comment>Заполнение таблицы пользователей</comment>
         <insert tableName="persons">
+            <column name="person_id" valueNumeric="2"/>
             <column name="last_name" value="Васильков"/>
             <column name="first_name" value="Роман"/>
             <column name="middle_name" value="Сергеевич"/>
-            <column name="birthdate" valueDate="1980-05-14"/>
+            <column name="birthdate" valueComputed="to_date('14.05.1980','DD.MM.YYYY')"/>
         </insert>
         <insert tableName="persons">
+            <column name="person_id" valueNumeric="3"/>
             <column name="last_name" value="Тебенькова"/>
             <column name="first_name" value="Ольга"/>
             <column name="middle_name" value="Васильевна"/>
-            <column name="birthdate" valueDate="1990-02-18"/>
+            <column name="birthdate" valueComputed="to_date('18.02.1990','DD.MM.YYYY')"/>
         </insert>
         <insert tableName="persons">
+            <column name="person_id" valueNumeric="4"/>
             <column name="last_name" value="Захаров"/>
             <column name="first_name" value="Павел"/>
             <column name="middle_name" value="Олегович"/>
-            <column name="birthdate" valueDate="1996-08-10"/>
+            <column name="birthdate" valueComputed="to_date('10.08.1996','DD.MM.YYYY')"/>
         </insert>
     </changeSet>
 
@@ -40,26 +43,29 @@
     <changeSet id="ins3" author="${ref_author}">
         <comment>Заполнение таблицы договоров</comment>
         <insert tableName="documents">
+            <column name="document_id" valueNumeric="2"/>
             <column name="doc_type_id" valueNumeric="1"/>
-            <column name="person_id" valueNumeric="10"/>
+            <column name="person_id" valueNumeric="2"/>
             <column name="doc_name" value="Договор аренды автомобиля Мазда"/>
-            <column name="date_end" valueComputed="to_date('2019-04-05','YYYY-MM-DD')"/>
+            <column name="date_end" valueComputed="to_date('05.04.2019','DD.MM.YYYY')"/>
             <column name="amount" valueNumeric="1000"/>
         </insert>
         <insert tableName="documents">
+            <column name="document_id" valueNumeric="3"/>
             <column name="doc_type_id" valueNumeric="1"/>
-            <column name="person_id" valueNumeric="10"/>
+            <column name="person_id" valueNumeric="2"/>
             <column name="doc_name" value="Договор аренды квартиры на Шехурдина 50-124"/>
-            <column name="date_start" valueDate="to_date('2018-01-01','YYYY-MM-DD')"/>
-            <column name="date_end" valueDate="to_date('2019-04-05','YYYY-MM-DD')"/>
+            <column name="date_start" valueDate="to_date('01.01.2018','DD.MM.YYYY')"/>
+            <column name="date_end" valueDate="to_date('05.04.2019','DD.MM.YYYY')"/>
             <column name="amount" valueNumeric="989"/>
         </insert>
         <insert tableName="documents">
+            <column name="document_id" valueNumeric="4"/>
             <column name="doc_type_id" valueNumeric="2"/>
-            <column name="person_id" valueNumeric="20"/>
+            <column name="person_id" valueNumeric="3"/>
             <column name="doc_name" value="Договор оказания клининговых услуг по адресу Шехурдина 50-124"/>
-            <column name="date_start" valueDate="to_date('2018-01-01','YYYY-MM-DD')"/>
-            <column name="date_end" valueDate="to_date('2019-04-05','YYYY-MM-DD')"/>
+            <column name="date_start" valueDate="to_date('01.01.2018','DD.MM.YYYY')"/>
+            <column name="date_end" valueDate="to_date('05.04.2019','DD.MM.YYYY')"/>
             <column name="amount" valueNumeric="400"/>
         </insert>
     </changeSet>
@@ -67,11 +73,11 @@
     <changeSet id="ins4" author="${ref_author}">
         <comment>Заполнение таблицы договоров аренды</comment>
         <insert tableName="documents_rent">
-            <column name="document_id" valueComputed="(select document_id from documents where amount=1000)"/>
+            <column name="document_id" valueNumeric="2"/>
             <column name="address" value="Автосалон Мазда на Провиантском"/>
         </insert>
         <insert tableName="documents_rent">
-            <column name="document_id" valueComputed="(select document_id from documents where amount=989)"/>
+            <column name="document_id" valueNumeric="3"/>
             <column name="address" value="Шехурдина 50-124"/>
         </insert>
     </changeSet>
@@ -79,7 +85,7 @@
     <changeSet id="ins5" author="${ref_author}">
         <comment>Заполнение таблицы договоров сервиса</comment>
         <insert tableName="documents_service">
-            <column name="document_id" valueComputed="(select document_id from documents where amount=400)"/>
+            <column name="document_id" valueNumeric="4"/>
             <column name="service_name" value="Блеск-сервис"/>
         </insert>
     </changeSet>

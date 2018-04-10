@@ -9,7 +9,11 @@
 
     <changeSet id="createView-09042018-01" author="${ref_author}">
         <comment>Создание view для актуальных документов</comment>
-        <createView replaceIfExists="true"
-                    viewName="v_actual_documents">select * from documents doc where now()::date between doc.date_start::date and doc.date_end::date</createView>
+        <createView replaceIfExists="true" viewName="v_actual_documents">
+            select doc.*, p.last_name||' '|| p.first_name||' '|| p.middle_name as fio
+            from documents doc
+            join persons p using(person_id)
+            where now() between doc.date_start and doc.date_end
+        </createView>
     </changeSet>
 </databaseChangeLog>
