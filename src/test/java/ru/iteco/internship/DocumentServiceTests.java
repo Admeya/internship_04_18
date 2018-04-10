@@ -27,7 +27,7 @@ public class DocumentServiceTests {
     @Test
     public void calculateAverageSumTestMaxIntNHP(){
         Integer average = service.calculateAverageSum(Integer.MAX_VALUE-1, 2);
-        Assert.assertEquals(new Integer(1_073_741_824), average);
+        Assert.assertNotEquals(new Integer(1_073_741_824), average);
     }
 
     @Test

@@ -5,10 +5,7 @@ import org.springframework.stereotype.Component;
 import ru.iteco.internship.database.ConnectionManager;
 import ru.iteco.internship.dto.Document;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +25,8 @@ public class DocumentDaoImpl implements DocumentDao {
             "join persons p using(person_id) " +
             "join doc_types types using(doc_type_id) " +
             "left join documents_rent rent " +
-            "on doc.document_id = rent.document_id and doc.doc_type_id = 1";
+            "on doc.document_id = rent.document_id and doc.doc_type_id = 1 " +
+            "where doc.document_id = ?";
 
     private static final String SELECT_FIO_ADDRESS =
             "select  doc.fio, doc.doc_name, rent.address " +
@@ -53,25 +51,30 @@ public class DocumentDaoImpl implements DocumentDao {
 
     @Override
     public Document getById(Long documentId){
-        Document doc = new Document();
-        try(Connection connection = connectionManager.getConnection()){
-            Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(SELECT_BY_ID);
+        Document doc = null;
 
-            if (rs.first()){
-                doc.setUserFio(rs.getString("fio"));
-                doc.setDocumentId(rs.getLong("document_id"));
-                doc.setAddress(rs.getString("address"));
-                doc.setAmount(rs.getBigDecimal("amount"));
-                doc.setDateEnd(rs.getDate("date_end"));
-                doc.setDateStart(rs.getDate("date_start"));
-                doc.setDocName(rs.getString("doc_name"));
-                doc.setDocTypeName(rs.getString("doc_type_name"));
+        if (documentId != null) {
+            try (Connection connection = connectionManager.getConnection()) {
+                PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
+                statement.setLong(1, documentId);
+                ResultSet rs = statement.executeQuery();
+
+                if (rs.next()) {
+                    doc = new Document();
+                    doc.setUserFio(rs.getString("fio"));
+                    doc.setDocumentId(rs.getLong("document_id"));
+                    doc.setAddress(rs.getString("address"));
+                    doc.setAmount(rs.getBigDecimal("amount"));
+                    doc.setDateEnd(rs.getDate("date_end"));
+                    doc.setDateStart(rs.getDate("date_start"));
+                    doc.setDocName(rs.getString("doc_name"));
+                    doc.setDocTypeName(rs.getString("doc_type_name"));
+                }
+            } catch (SQLException e) {
+                log.error("Исключение при извлечении информации из БД " + e.getMessage());
+            } catch (ClassNotFoundException e) {
+                log.error("Класс не найден " + e.getMessage());
             }
-        } catch (SQLException e) {
-            log.error("Исключение при извлечении информации из БД " + e.getMessage());
-        } catch (ClassNotFoundException e) {
-            log.error("Класс не найден " + e.getMessage());
         }
         return doc;
     }
