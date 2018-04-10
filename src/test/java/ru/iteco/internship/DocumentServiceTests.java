@@ -5,7 +5,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.runners.MockitoJUnitRunner;
+import ru.iteco.internship.dao.DocumentDao;
+import ru.iteco.internship.dao.DocumentDaoImpl;
 import ru.iteco.internship.service.DocumentService;
+
+import static org.mockito.Mockito.mock;
 
 /**
  * Тестирование сервиса по работе с документами
@@ -15,14 +19,14 @@ import ru.iteco.internship.service.DocumentService;
 public class DocumentServiceTests {
 
     @InjectMocks
-    private DocumentService service = new DocumentService();
+    private DocumentDao dao = mock(DocumentDaoImpl.class);
+    private DocumentService service = new DocumentService(dao);
 
     @Test
     public void calculateAverageSumTestHp(){
         Integer average = service.calculateAverageSum(1000, 2000);
         Assert.assertEquals(new Integer(1500), average);
     }
-
 
     @Test
     public void calculateAverageSumTestMaxIntNHP(){
@@ -34,5 +38,10 @@ public class DocumentServiceTests {
     public void calculateAverageSumTestNullHP(){
         Integer average = service.calculateAverageSum(0, 0);
         Assert.assertEquals(new Integer(0), average);
+    }
+
+    @Test
+    public void testServiceMethod(){
+        System.out.println(service.calculateAverageDocumentSum(2L, 3L));
     }
 }

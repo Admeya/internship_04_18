@@ -1,11 +1,10 @@
 package ru.iteco.internship;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import ru.iteco.internship.dao.DocumentDao;
 import ru.iteco.internship.dao.DocumentDaoImpl;
@@ -17,6 +16,7 @@ import java.util.List;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
 
 /**
  * Тестирование {@link DocumentDao}
@@ -26,15 +26,17 @@ import static org.junit.Assert.assertEquals;
 public class DocumentDaoImplTests {
 
     @InjectMocks
-    private DocumentDao dao = new DocumentDaoImpl();
+    private DocumentDao dao = mock(DocumentDaoImpl.class);
 
-    @Before
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-    }
+//    @Before
+//    public void setUp() {
+//        MockitoAnnotations.initMocks(this);
+//    }
 
     @Test
     public void getFioAddressTestHP(){
+        Mockito.when(dao.getFioAddress()).thenReturn();
+
         assertEquals(2, dao.getFioAddress().size());
     }
 
