@@ -1,7 +1,6 @@
 package ru.iteco.internship.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -10,9 +9,8 @@ import java.util.Date;
  * Документ
  * Created by ie.bykova on 09.04.2018.
  */
-@Getter
-@Setter
-public class Document {
+
+public @Data class Document {
     /**
      * Идентификатор документа
      */
@@ -49,4 +47,10 @@ public class Document {
      * Наименование типа договора
      */
     private String docTypeName;
+
+    public Document(){}
+
+    public Document (Long count){
+        this.count = count;
+    }
 }

@@ -3,13 +3,11 @@ package ru.iteco.internship;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
+import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 import ru.iteco.internship.dao.DocumentDao;
 import ru.iteco.internship.dao.DocumentDaoImpl;
 import ru.iteco.internship.service.DocumentService;
-
-import static org.mockito.Mockito.mock;
 
 /**
  * Тестирование сервиса по работе с документами
@@ -18,30 +16,30 @@ import static org.mockito.Mockito.mock;
 @RunWith(MockitoJUnitRunner.class)
 public class DocumentServiceTests {
 
-    @InjectMocks
-    private DocumentDao dao = mock(DocumentDaoImpl.class);
+    @Spy
+    private DocumentDao dao = new DocumentDaoImpl();
     private DocumentService service = new DocumentService(dao);
 
     @Test
-    public void calculateAverageSumTestHp(){
-        Integer average = service.calculateAverageSum(1000, 2000);
-        Assert.assertEquals(new Integer(1500), average);
+    public void HP_calculateAverageSumTest() {
+        Long average = service.calculateAverageSum(1000, 2000);
+        Assert.assertEquals(new Long(1500), average);
     }
 
     @Test
-    public void calculateAverageSumTestMaxIntNHP(){
-        Integer average = service.calculateAverageSum(Integer.MAX_VALUE-1, 2);
-        Assert.assertNotEquals(new Integer(1_073_741_824), average);
+    public void HP_calculateAverageSumMaxIntTest() {
+        Long average = service.calculateAverageSum(Integer.MAX_VALUE - 1, 2);
+        Assert.assertEquals(new Long(1_073_741_824), average);
     }
 
     @Test
-    public void calculateAverageSumTestNullHP(){
-        Integer average = service.calculateAverageSum(0, 0);
-        Assert.assertEquals(new Integer(0), average);
+    public void HP_calculateAverageSumNullTest() {
+        Long average = service.calculateAverageSum(0, 0);
+        Assert.assertEquals(new Long(0), average);
     }
 
     @Test
-    public void testServiceMethod(){
-        System.out.println(service.calculateAverageDocumentSum(2L, 3L));
+    public void HP_ServiceMethodTest() {
+        Assert.assertEquals(994.00, service.calculateAverageDocumentSum(2L, 3L), 0.01);
     }
 }

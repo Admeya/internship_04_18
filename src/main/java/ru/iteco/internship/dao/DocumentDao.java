@@ -20,7 +20,7 @@ public interface DocumentDao {
      * по действующим в данный момент договорам
      * @return список записей
      */
-    List<Document> getFioAddress();
+    List<Document> getFioAndAddress();
 
     /**
      * Вывести ФИО пользователей с максимальной суммой по договорам
