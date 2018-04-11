@@ -36,8 +36,6 @@ public class RunLiquibase {
             log.error("Исключение БД ", e);
         } catch (LiquibaseException e) {
             log.error("Исключение при выполнении миграции", e);
-        } catch (ClassNotFoundException e) {
-            log.error("Класс не найден", e);
         }
     }
 }

@@ -53,7 +53,7 @@ public class ConnectionManager {
         }
     }
 
-    public Connection getConnection() throws ClassNotFoundException, SQLException {
+    public Connection getConnection() throws SQLException {
         return DriverManager.getConnection(url, user, pass);
     }
 }

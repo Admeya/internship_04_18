@@ -3,7 +3,6 @@ package ru.iteco.internship;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 import ru.iteco.internship.dao.DocumentDao;
 import ru.iteco.internship.dao.DocumentDaoImpl;
@@ -15,8 +14,6 @@ import ru.iteco.internship.service.DocumentService;
  */
 @RunWith(MockitoJUnitRunner.class)
 public class DocumentServiceTests {
-
-    @Spy
     private DocumentDao dao = new DocumentDaoImpl();
     private DocumentService service = new DocumentService(dao);
 

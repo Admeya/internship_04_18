@@ -1,7 +1,6 @@
 package ru.iteco.internship.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.iteco.internship.dao.DocumentDao;
 import ru.iteco.internship.dao.DocumentDaoImpl;
@@ -18,9 +17,8 @@ import java.util.Optional;
 @Service
 @Slf4j
 public class DocumentService {
-    private DocumentDao dao;
 
-    @Autowired
+    private DocumentDao dao;
     public DocumentService(DocumentDao dao){
         this.dao = dao;
     }
@@ -65,16 +63,15 @@ public class DocumentService {
             List<Document> doc2 = dao.getFioAndAddress();
             Optional<Document> opt = doc2.stream().filter(d->d.getDocumentId().equals(doc.getDocumentId())).findFirst();
             if (opt.isPresent()){
-                System.out.println("У договора заполнен адрес аренды");
+                log.info("У договора заполнен адрес аренды");
                 condition = true;
             } else {
-                System.out.println("Внимание! У договора нет адреса аренды!");
+                log.error("Внимание! У договора нет адреса аренды!");
             }
         } else if (DocumentTypes.RENT.getValue().equals(doc.getDocTypeName())){
-            System.out.println("Внимание! У договора аренды нет адреса аренды!");
+            log.error("Внимание! У договора аренды нет адреса аренды!");
         } else {
-            System.out.println("У договора не должно быть адреса аренды!");
-            condition = true;
+            log.error("У договора не должно быть адреса аренды!");
         }
         return condition;
     }

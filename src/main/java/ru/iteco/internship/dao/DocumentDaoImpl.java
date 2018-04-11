@@ -35,7 +35,7 @@ public class DocumentDaoImpl implements DocumentDao {
                     "ON doc.document_id = rent.document_id AND doc.doc_type_id = 1";
 
     private static final String SELECT_FIO_MAX_SUM =
-            "SELECT doc.fio, sum(doc.amount) amount " +
+            "SELECT  doc.fio, sum(doc.amount) amount " +
                     "FROM  v_actual_documents doc " +
                     "JOIN persons p USING(person_id) " +
                     "GROUP BY p.person_id, doc.fio " +
@@ -54,11 +54,10 @@ public class DocumentDaoImpl implements DocumentDao {
         Document doc = null;
         if (documentId == null) return doc;
 
-        try (Connection connection = connectionManager.getConnection()) {
-            PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID);
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID)) {
             statement.setLong(1, documentId);
             ResultSet rs = statement.executeQuery();
-
             if (rs.next()) {
                 doc = new Document();
                 doc.setUserFio(rs.getString("fio"));
@@ -72,20 +71,16 @@ public class DocumentDaoImpl implements DocumentDao {
             }
         } catch (SQLException e) {
             log.error("Исключение при извлечении информации из БД " + e.getMessage());
-        } catch (ClassNotFoundException e) {
-            log.error("Класс не найден " + e.getMessage());
         }
-
         return doc;
     }
 
     @Override
     public List<Document> getFioAndAddress() {
         List<Document> documents = new ArrayList<>();
-        try (Connection connection = connectionManager.getConnection()) {
-            Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(SELECT_FIO_ADDRESS);
-
+        try (Connection connection = connectionManager.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet rs = statement.executeQuery(SELECT_FIO_ADDRESS)) {
             while (rs.next()) {
                 Document doc = new Document();
                 doc.setDocumentId(rs.getLong("document_id"));
@@ -96,8 +91,6 @@ public class DocumentDaoImpl implements DocumentDao {
             }
         } catch (SQLException e) {
             log.error("Исключение при извлечении информации из БД " + e.getMessage());
-        } catch (ClassNotFoundException e) {
-            log.error("Класс не найден " + e.getMessage());
         }
         return documents;
     }
@@ -105,10 +98,9 @@ public class DocumentDaoImpl implements DocumentDao {
     @Override
     public List<Document> getFioMaxSum() {
         List<Document> documents = new ArrayList<>();
-        try (Connection connection = connectionManager.getConnection()) {
-            Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(SELECT_FIO_MAX_SUM);
-
+        try (Connection connection = connectionManager.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet rs = statement.executeQuery(SELECT_FIO_MAX_SUM)) {
             while (rs.next()) {
                 Document doc = new Document();
                 doc.setUserFio(rs.getString("fio"));
@@ -117,8 +109,6 @@ public class DocumentDaoImpl implements DocumentDao {
             }
         } catch (SQLException e) {
             log.error("Исключение при извлечении информации из БД " + e.getMessage());
-        } catch (ClassNotFoundException e) {
-            log.error("Класс не найден " + e.getMessage());
         }
         return documents;
     }
@@ -126,10 +116,9 @@ public class DocumentDaoImpl implements DocumentDao {
     @Override
     public List<Document> getCountDocTypes() {
         List<Document> documents = new ArrayList<>();
-        try (Connection connection = connectionManager.getConnection()) {
-            Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(SELECT_COUNT_TYPES);
-
+        try (Connection connection = connectionManager.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet rs = statement.executeQuery(SELECT_COUNT_TYPES)) {
             while (rs.next()) {
                 Document doc = new Document();
                 doc.setCount(rs.getLong("cnt"));
@@ -138,8 +127,6 @@ public class DocumentDaoImpl implements DocumentDao {
             }
         } catch (SQLException e) {
             log.error("Исключение при извлечении информации из БД " + e.getMessage());
-        } catch (ClassNotFoundException e) {
-            log.error("Класс не найден " + e.getMessage());
         }
         return documents;
     }

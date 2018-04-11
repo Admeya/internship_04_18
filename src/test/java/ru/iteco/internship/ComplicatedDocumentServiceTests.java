@@ -16,7 +16,6 @@ import static org.mockito.Mockito.when;
  */
 @RunWith(MockitoJUnitRunner.class)
 public class ComplicatedDocumentServiceTests {
-
     @Spy
     private DocumentDao dao = new DocumentDaoImpl();
     private DocumentService service = new DocumentService(dao);
